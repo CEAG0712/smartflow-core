@@ -3,6 +3,7 @@ import { SendSMS } from '../actions/SendSMS';
 import { SendEmail } from '../actions/SendEmail';
 import { Condition } from '../actions/Condition';
 import { Loop } from '../actions/Loop';
+import { GrantBonus } from '../actions/GrantBonus';
 
 /**
  * Defines the shape of incoming JSON describing a decision tree node.
@@ -62,6 +63,14 @@ export function parseAction(json: ActionJSON): Action {
         count,
         action: parseAction(json.subtree),
       });
+    }
+
+    case 'GrantBonus': {
+      const { bonusType, amount } = json.parameters || {};
+      if (!bonusType || typeof amount !== 'number') {
+        throw new Error('GrantBonus requires "bonusType" and numeric "amount" in parameters.');
+      }
+      return new GrantBonus({ bonusType, amount });
     }
 
     default:
