@@ -1,75 +1,149 @@
-Business Justification: Why This Decision Tree Engine Matters
+# Business Justification: Why This Decision Tree Engine Matters
 
-In the iGaming industry, personalization, speed, and retention are king. Players churn fast. Offers must be timely. Operations and marketing teams need to automate engagement workflows — without waiting for backend deployments.
+In the iGaming industry, **personalization**, **speed**, and **retention** are king.
 
-SmartFlow Core solves this with a real-time, extensible decision tree engine that:
+Players churn fast. Offers must be timely.
 
-Executes logic based on live player data
+Operations teams want to automate responses without engineering tickets.
 
-Supports non-engineering users through JSON-configurable rules
+We need a backend component that allows us to **orchestrate logic visually and dynamically** — without sacrificing scale, reliability, or extensibility.
 
-Provides a foundation for marketing automation and compliance workflows
+This Decision Tree Engine enables that.
 
-Core Problem
+- Business users define flexible logic:  
+  _“If user hasn't played in 5 days → send SMS.”_
 
-Marketing wants to automate: "If user hasn’t played in 5 days, send SMS"
+- Backend executes it in **real-time** with **full traceability**
 
-Engineering wants to avoid custom if/else logic in backend services
+- Engineers are free to focus on platform stability and core features
 
-Product wants traceability and speed
+---
 
-The Solution
+## Persona: Maria, a VIP player
 
-Define trees as JSON: dynamic, human-readable, no code deployment required
+1. Maria hasn’t played in 5 days  
+2. Her player profile is evaluated in real time by a decision tree:  
+   - If she's **Gold Tier AND inactive** → trigger SMS  
+   - If she's **Silver Tier** → send email with bonus offer  
+3. Decision logic is defined in JSON (no deploys needed to change it)  
+4. Marketing updates the rules through a future UI (not part of this exercise)  
+5. Backend processes the tree within **200ms** and **logs the outcome**
 
-Evaluate trees in under 200ms
+This powers engagement, compliance, and automation across **marketing**, **risk**, and **operations**.
 
-Trigger actions like:
+---
 
-Send SMS
+## Business Goal
 
-Send Email
+Automate player engagement and retention actions — SMS, email, bonuses — using a backend **decision-tree engine written in TypeScript** that evaluates player data in real time and triggers the appropriate marketing or compliance action.
 
-Grant Bonus
+---
 
-Branch logic with Condition
+## User Story 1: Define Configurable Decision Trees
 
-Repeat logic with Loop
+**As a business analyst or developer**,  
+**I want to define a decision tree using JSON**  
+**So that I can model business rules without rewriting backend code**
 
-Persona Example: Maria, a VIP Player
+### Acceptance Criteria
 
-Maria hasn’t played in 5 days
+#### Functional
 
-Her profile is evaluated in real time:
+- JSON structure must support these node types:  
+  `SendSMS`, `SendEmail`, `Condition`, `Loop`  
+- Nested and conditional branches allowed
 
-If Gold Tier → send VIP SMS
+#### Technical
 
-If Silver Tier → email upgrade offer
+- Each node is a TypeScript class implementing the `Action` interface  
+- JSON deserializes to in-memory executable objects  
+- JSON schema includes:
+  - `type`
+  - `parameters`
+  - `trueAction` / `falseAction` (for Condition)
+  - `subtree` (for Loop)
 
-Logic is versioned, editable, and defined in JSON
+#### Non-Functional
 
-No redeploys required to update the flow
+- Malformed JSON must throw descriptive errors  
+- Schema must support frontend generation
 
-Logs and results are traceable for auditing
+#### User-Based
 
-Business Benefits
+- UIs should generate valid JSON  
+- Logic is versioned and editable
 
-Fast time to market for campaigns
+---
 
-Logic can be updated by product or marketing
+## User Story 2: Execute Tree in Real-Time Based on Context
 
-No risk of introducing bugs into core backend
+**As a backend service**,  
+**I want to receive and execute a decision tree**  
+**So that I can automate actions without manual intervention**
 
-Fully traceable for compliance and A/B testing
+### Acceptance Criteria
 
-Summary
+#### Functional
 
-SmartFlow Core enables iGaming businesses to:
+- POST `/execute-tree` accepts:
+  - `tree` JSON
+  - Optional `context` (e.g., player tier, inactivity)
+- Supported actions:
+  - Log SMS: “Sending SMS to X”
+  - Log Email: “Sending Email from X to Y”
+  - Evaluate JS expression
+  - Loop subtree N times
 
-Automate marketing without engineering tickets
+#### Technical
 
-Dynamically adapt to player behavior
+- Each Action implements `async execute(context: Record<string, any>)`  
+- JS expressions use `filtrex` (safe eval)  
+- Loops execute N times
 
-Maintain platform stability and separation of concerns
+#### Non-Functional
 
-This system is not just an exercise — it’s the blueprint for real-world marketing and ops automation.
+- Tree executes ≤ 200ms for standard input  
+- Errors are non-crashing  
+- All branches log results
+
+#### User-Based
+
+- Tree reflects live player attributes  
+- Logs are traceable for marketing and support
+
+---
+
+## User Story 3: Add New Action Type with Minimal Friction
+
+**As a developer**,  
+**I want to add new actions (e.g., GrantBonus)**  
+**So that business logic evolves without modifying the core engine**
+
+### Acceptance Criteria
+
+#### Functional
+
+- New actions = new class implementing `Action`  
+- Registered via `ActionFactory`
+
+#### Technical
+
+- Factory pattern supports clean extension  
+- New actions log their behavior
+
+#### Non-Functional
+
+- Existing actions remain untouched  
+- All tests pass with new action added
+
+#### User-Based
+
+- Business users get access to new actions like:
+  - Grant Bonus
+  - Flag Player
+  - Send Notification
+
+---
+
+
+
