@@ -89,8 +89,6 @@ This diagram shows the internal layers and responsibilities of the SmartFlow Cor
 - ⚙️ **Extensible:** Add new actions via `implements Action` + registration
 - 🔒 **Secure:** No `eval`, no `vm2`, safe expression parsing via `filtrex`
 - 🚀 **Fast:** Execution time < 150ms typical
-- 🔍 **Auditable:** All actions log in structured format (JSON)
-- 🧱 **Resilient:** Errors are caught and logged; execution never crashes the service
 
 ---
 
