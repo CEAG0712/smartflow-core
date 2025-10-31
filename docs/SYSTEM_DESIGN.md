@@ -32,7 +32,6 @@ SmartFlow Core enables:
 | Define logic without backend code   | User Story 1      |
 | Execute personalized workflows      | User Story 2      |
 | Add new actions without rewrites    | User Story 3      |
-| Support extensibility and auditing  | User Story 4      |
 
 ---
 
