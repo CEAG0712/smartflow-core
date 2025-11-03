@@ -5,14 +5,22 @@ SmartFlow Core is a real-time decision tree execution engine designed to empower
 
 This repository fulfills and exceeds the requirements of a take-home Developer Exercise. The system is modular, extensible, and production-ready.
 
+
 ---
 
-## 📄 Supporting Documentation
+## 📄 Supporting Documentation (Developer Exercise)
 
 * [📘 Business Justification: Why This Engine Matters](./docs/BUSINESS_JUSTIFICATION.md)
 * [🧠 System Design Document (Architecture, Actors, Real-Time Flow)](./docs/SYSTEM_DESIGN.md)
 
 ---
+
+## 📄 Supporting Documentation (System Design Exercise)
+
+* [📘 System Design Exercise: Turning a Single-Tenant Platform into SaaS](./docs/System Design Exercise - Carlos Arosemena NOV032025.docx)
+
+---
+
 
 ## 🧪 How to Run and Test
 
